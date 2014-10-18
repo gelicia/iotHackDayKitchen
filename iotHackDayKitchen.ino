@@ -1,5 +1,7 @@
 #include <Servo.h> 
 #include <Adafruit_NeoPixel.h>
+#include "LPD8806.h"
+#include "SPI.h"
 
 Servo clockServo;
 int clockPos = 0;    // variable to store the servo position 
@@ -15,6 +17,9 @@ int waterOn = 0;
 int waterLEDPin = 11;
 Adafruit_NeoPixel waterLEDStrip = Adafruit_NeoPixel(3, waterLEDPin, NEO_GRB + NEO_KHZ800);
 
+int statusDataPin  = 23;
+int statusClockPin = 22;
+LPD8806 statusStrip = LPD8806(10, statusDataPin, statusClockPin);
 
 void setup() {
   Serial.begin(9600);
@@ -29,6 +34,10 @@ void setup() {
   waterLEDStrip.begin();
   waterLEDStrip.show(); 
   colorWipe(waterLEDStrip, waterLEDStrip.Color(0, 0, 255));
+  
+  statusStrip.begin();
+  statusStrip.show();
+  statusColorWipe(statusStrip, waterLEDStrip.Color(0, 0, 255));
 }
 
 void loop() {
@@ -52,6 +61,13 @@ void loop() {
 }
 
 void colorWipe(Adafruit_NeoPixel strip, uint32_t c) {
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+      strip.setPixelColor(i, c);
+      strip.show();
+  }
+}
+
+void statusColorWipe(LPD8806 strip, uint32_t c) {
   for(uint16_t i=0; i<strip.numPixels(); i++) {
       strip.setPixelColor(i, c);
       strip.show();
