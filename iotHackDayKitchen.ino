@@ -1,10 +1,21 @@
-#include <Servo.h> 
+#include <Servo.h>
+#include <SimpleTimer.h>
 #include <Adafruit_NeoPixel.h>
 #include "LPD8806.h"
 #include "SPI.h"
 
+SimpleTimer timer;
+int timerId = 0;
+uint16_t timeoutTime = 5000;
+uint8_t success = 0;
+uint8_t failed = 0;
+
 Servo clockServo;
 int clockPos = 0;    // variable to store the servo position 
+
+// 0 - 1024
+const uint8_t potOffMin = 0;
+const uint8_t potOffMax = 0;
 
 int potPinL = A0;    // select the input pin for the potentiometer
 int potPinR = A1;    // select the input pin for the potentiometer
@@ -28,6 +39,10 @@ const uint8_t kStoveCold = 0;
 const uint8_t kStoveMedium = 1;
 const uint8_t kStoveHot = 2;
 
+const uint8_t kStepStateStart = 0;
+const uint8_t kStepStateLoop = 1;
+const uint8_t kStepStateEnd = 2;
+
 const uint8_t veggies[] = {6, 13, 5, 10, 9, 11};
 
 uint8_t stoveTemp = 0;
@@ -36,6 +51,9 @@ uint8_t veggieOne = 0;
 uint8_t veggieTwo = 0;
 uint8_t veggieThree = 0;
 uint8_t veggieFour = 0;
+
+uint8_t gameStep = 0;
+uint8_t stepState = 0;
 
 int statusDataPin  = 23;
 int statusClockPin = 22;
@@ -75,6 +93,38 @@ void setup() {
 }
 
 void loop() {
+  if (gameStep == 0) {
+    if (stepState == kStepStateStart) {
+      timerId = timer.setTimeout(timeoutTime, timedOut);
+    } else if (stepState == kStepStateLoop) {
+      
+    } else if (stepState == kStepStateEnd) {
+      
+    }
+    
+  } else if (gameStep == 1) {
+    
+  } else if (gameStep == 2) {
+    
+  } else if (gameStep == 3) {
+    
+  } else if (gameStep == 4) {
+    
+  } else if (gameStep == 5) {
+    
+  } else if (gameStep == 6) {
+    
+  } else if (gameStep == 7) {
+    
+  } else if (gameStep == 8) {
+    
+  } else if (gameStep == 9) {
+    
+  } else if (gameStep == 10) {
+    
+  }
+  
+  
   touchLoop();
   valL = analogRead(potPinL); 
   valR = analogRead(potPinR); 
@@ -93,6 +143,10 @@ void loop() {
  // theaterChase(waterLEDStrip, waterLEDStrip.Color(127, 0, 0), 50); // Red
   
   delay(15);
+}
+
+void timedOut() {
+    failed++;
 }
 
 void colorWipe(Adafruit_NeoPixel strip, uint32_t c) {
