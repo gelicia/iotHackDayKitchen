@@ -22,12 +22,36 @@ uint8_t touchTwoPin = 15;
 uint8_t touchThreePin = 16;
 uint8_t touchFourPin = 17;
 
+const uint8_t kNoWater = 0;
+const uint8_t kWater = 1;
+const uint8_t kStoveCold = 0;
+const uint8_t kStoveMedium = 1;
+const uint8_t kStoveHot = 2;
+
+const uint8_t veggies[] = {6, 13, 5, 10, 9, 11};
+
+uint8_t stoveTemp = 0;
+uint8_t useWater = 0;
+uint8_t veggieOne = 0;
+uint8_t veggieTwo = 0;
+uint8_t veggieThree = 0;
+uint8_t veggieFour = 0;
+
 int statusDataPin  = 23;
 int statusClockPin = 22;
 LPD8806 statusStrip = LPD8806(10, statusDataPin, statusClockPin);
 
 void setup() {
   Serial.begin(9600);
+  
+  randomSeed(analogRead(0));
+  
+  stoveTemp = random(1, 3);
+  useWater = random(2);
+  veggieOne = random(6);
+  veggieTwo = random(6);
+  veggieThree = random(6);
+  veggieFour = random(6);
   
   clockServo.attach(9);
   
