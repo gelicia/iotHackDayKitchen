@@ -1,7 +1,8 @@
+#include "iotHackDayKitchen.h"
 #include <Servo.h> 
-#include <Adafruit_NeoPixel.h>
+#include "Adafruit_NeoPixel.h"
 #include "LPD8806.h"
-#include "SPI.h"
+#include <SPI.h>
 
 Servo clockServo;
 int clockPos = 0;    // variable to store the servo position 
@@ -17,11 +18,6 @@ int waterOn = 0;
 int waterLEDPin = 11;
 Adafruit_NeoPixel waterLEDStrip = Adafruit_NeoPixel(3, waterLEDPin, NEO_GRB + NEO_KHZ800);
 
-uint8_t touchOnePin = 14;
-uint8_t touchTwoPin = 15;
-uint8_t touchThreePin = 16;
-uint8_t touchFourPin = 17;
-
 int statusDataPin  = 23;
 int statusClockPin = 22;
 LPD8806 statusStrip = LPD8806(10, statusDataPin, statusClockPin);
@@ -36,25 +32,19 @@ void setup() {
   
   pinMode(waterSwitchPin, OUTPUT);
   
-  pinMode(touchOnePin, INPUT);
-  pinMode(touchTwoPin, INPUT);
-  pinMode(touchThreePin, INPUT);
-  pinMode(touchFourPin, INPUT);
-  
   waterLEDStrip.begin();
   waterLEDStrip.show(); 
   colorWipe(waterLEDStrip, waterLEDStrip.Color(0, 0, 255));
   
   statusStrip.begin();
   statusStrip.show();
-  //statusColorWipe(statusStrip, waterLEDStrip.Color(0, 0, 255));
+  statusColorWipe(statusStrip, waterLEDStrip.Color(0, 0, 255));
 }
 
 void loop() {
-  touchLoop();
   valL = analogRead(potPinL); 
   valR = analogRead(potPinR); 
-  //Serial.println("Reading: " + String(valL) + " " + String(valR));
+  Serial.println("Reading: " + String(valL) + " " + String(valR));
   
   clockServo.write(clockPos);
   clockPos++;
@@ -63,7 +53,7 @@ void loop() {
   }
   
   waterOn = digitalRead(waterSwitchPin);
-  //Serial.println("Water on: " + String(waterOn));
+  Serial.println("Water on: " + String(waterOn));
   
  // theaterChase(waterLEDStrip, waterLEDStrip.Color(0, 0, 127), 50); // Blue
  // theaterChase(waterLEDStrip, waterLEDStrip.Color(127, 0, 0), 50); // Red
