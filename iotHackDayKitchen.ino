@@ -1,7 +1,6 @@
 #include <Servo.h>
 #include <SimpleTimer.h>
 #include <Adafruit_NeoPixel.h>
-#include "LPD8806.h"
 #include "SPI.h"
 
 SimpleTimer ledTimer;
@@ -67,9 +66,8 @@ uint8_t veggieFour = 0;
 uint8_t gameStep = 0;
 uint8_t stepState = 0;
 
-int statusDataPin  = 23;
-int statusClockPin = 22;
-LPD8806 statusStrip = LPD8806(10, statusDataPin, statusClockPin);
+int statusLEDPin = 22;
+Adafruit_NeoPixel statusStrip = Adafruit_NeoPixel(9, statusLEDPin, NEO_GRB + NEO_KHZ800);
 
 void setup() {
   Serial.begin(9600);
@@ -291,13 +289,6 @@ void ledTimedOut() {
 }
 
 void colorWipe(Adafruit_NeoPixel strip, uint32_t c) {
-  for(uint16_t i=0; i<strip.numPixels(); i++) {
-      strip.setPixelColor(i, c);
-      strip.show();
-  }
-}
-
-void statusColorWipe(LPD8806 strip, uint32_t c) {
   for(uint16_t i=0; i<strip.numPixels(); i++) {
       strip.setPixelColor(i, c);
       strip.show();
